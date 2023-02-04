@@ -1,0 +1,41 @@
+extends layout 
+
+block content 
+  h1 Title: #{book.title} 
+
+  p #[strong Author: ]
+    a(href=book.author.url) #{book.author.name} 
+  p #[strong Summary:] #{book.summary}
+  p #[strong ISBN:] #{book.isbn} 
+  p #[strong Genre:] 
+    each val, index in book.genre 
+      a(href=val.url) #{val.name}
+      if index < book.genre.length - 1
+        |, 
+
+  div(style='margin-left:20px;margin-top:20px')
+    h4 Book Copies 
+    dl
+      each instance in book_instances
+        hr 
+        p 
+          a(href=instance.url) #{book.title}   
+        if instance.status=="Available" 
+          p.text-success  #{instance.status} 
+        else if instance.status=="Maintenance" 
+          p.text-danger #{instance.status} 
+        else 
+          p.text-warning #{instance.status} 
+        p #[strong Imprint:] #{instance.imprint}
+        if instance.status!="Available" 
+          p #[strong Due Back:] #{instance.due_back_formatted}
+      
+      else 
+        p There are no copies of this book in the library.
+
+
+  hr
+  p  
+    a(href=book.url+'/update') Update book
+  p 
+    a(href=book.url+'/delete') Delete book
